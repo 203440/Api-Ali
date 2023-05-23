@@ -1,17 +1,15 @@
-import { Pool } from 'pg';
+import { Client } from 'pg';
 import dbConfig from './dbConfig';
 
-const pool = new Pool(dbConfig);
+const client = new Client(dbConfig);
 
-export default pool;
-// import { Pool } from 'pg';
+// Conexión a la base de datos
+client.connect()
+  .then(() => {
+    console.log('Conexión exitosa a la base de datos');
+  })
+  .catch((error) => {
+    console.error('Error al conectar a la base de datos:', error);
+  });
 
-// const pool = new Pool({
-//   user: 'postgres',
-//   password: '203440',
-//   host: 'localhost',
-//   port: 5432,
-//   database: 'libreria',
-// });
-
-// export default pool;
+export default client;

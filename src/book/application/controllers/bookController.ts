@@ -7,10 +7,11 @@ export class BookController {
 
   async getAllBooks(req: Request, res: Response): Promise<void> {
     try {
+      
       const books = await this.bookService.getAllBooks();
       res.json(books);
     } catch (error) {
-      res.status(500).json({ error: 'Error' });
+      res.status(500).json({ error: 'Internal server error' });
     }
   }
 
@@ -18,20 +19,20 @@ export class BookController {
     try {
       const { id, title, author, publicationYear } = req.body;
       const book = new Book(id, title, author, publicationYear);
-      this.bookService.createBook(book);
-      res.status(201).json({ message: 'Libro agregado' });
+      await this.bookService.createBook(book);
+      res.status(201).json({ message: 'Book created' });
     } catch (error) {
-      res.status(500).json({ error: 'Error' });
+      res.status(400).json({ error: 'Bad request' });
     }
   }
 
   async deleteBook(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
     try {
-      this.bookService.deleteBook(id);
+      await this.bookService.deleteBook(id);
       res.status(204).send();
     } catch (error) {
-      res.status(500).json({ error: 'Error' });
+      res.status(404).json({ error: 'Book not found' });
     }
   }
 
@@ -41,10 +42,9 @@ export class BookController {
 
     try {
       await this.bookService.updateBook(id, bookData);
-      res.status(204).send();
+      res.status(200).json({ message: 'Book updated' });
     } catch (error) {
-      res.status(500).json({ error: 'Error' });
+      res.status(400).json({ error: 'Bad request' });
     }
   }
-
 }
