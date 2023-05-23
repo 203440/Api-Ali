@@ -1,27 +1,15 @@
-import express from 'express';
-import { setupRoutes } from './book/infrastructure/routes';
-import { BookController } from './book/application/controllers/bookController';
-import { BookService } from './book/application/services/bookService';
-import { PgBookRepository } from './book/infrastructure/repositories/pgBookRepository';
+import express from "express";
+
+import { petRouter } from "./pets/infrastructure/petRouter";
 
 const app = express();
-const router = express.Router();
 
-// Crea las instancias de los componentes
-const bookRepository = new PgBookRepository();
-const bookService = new BookService(bookRepository);
-const bookController = new BookController(bookService);
+app.use(express.json());
 
-// Configura las rutas
-setupRoutes(router, bookController);
+app.use("/pets", petRouter);
 
-// Agrega el enrutador a la aplicación Express
-app.use('/api', router);
-
-// Inicia el servidor
-const port = 3000;
-app.listen(port, () => {
-  console.log(`Servidor en ejecución en http://localhost:${port}`);
+app.listen(3000, () => {
+  console.log(`[Application] Server online in port 3000`);
 });
 
 
