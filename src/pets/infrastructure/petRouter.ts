@@ -9,10 +9,10 @@ const petRepository = new petRepositoryImp();
 const addPetUseCase = new AddPetUseCase(petRepository);
 
 petRouter.post('/', async (req: Request, res: Response) => {
-    const { title, author, price } = req.body;
+    const { nombre, dueno, edad } = req.body;
 
     try {
-        const pet = new Pet( title, author, price);
+        const pet = new Pet( nombre, dueno, edad);
         await addPetUseCase.execute(pet);
         res.status(201).json({ message: 'Pet added successfully' });
     } catch (error) {
