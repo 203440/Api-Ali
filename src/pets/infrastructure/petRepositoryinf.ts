@@ -15,6 +15,21 @@ const connectionOptions = {
 const db = pgp(connectionOptions);
 
 export class petRepositoryImp implements PetRepository {
+    async findById(id: string): Promise<Pet | null> {
+        const query = 'SELECT * FROM pets WHERE id = $1';
+        try {
+            const result = await db.oneOrNone(query, id);
+            if (result) {
+                return new Pet(result.nombre, result.dueno, result.edad);
+            }
+            return null;
+        } catch (error) {
+            // Manejar el error
+            console.error('Error al buscar la mascota por ID:', error);
+            throw error;
+        }
+    }
+
     async save(pet: Pet): Promise<void> {
         await db.none('INSERT INTO pets(nombre, dueno, edad) VALUES($1, $2, $3)', [ pet.nombre, pet.dueno, pet.edad]);
     }

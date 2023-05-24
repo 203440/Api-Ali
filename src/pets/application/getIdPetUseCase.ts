@@ -1,10 +1,10 @@
 import { Pet } from "../domain/petModel";
 import { PetRepository } from "../domain/petRepository";
 
-export class GetPetUseCase {
+export class GetIdPetUseCase {
     constructor(private readonly petRepository: PetRepository) {}
 
-    async execute(): Promise<Pet[]> {
-        return await this.petRepository.findAll();
+    async execute(id: string): Promise<Pet | null> {
+        return await this.petRepository.findById(id);
     }
 }
